@@ -37,4 +37,4 @@ Claude's default can use `/loop 6h` where supported; a custom interval must repl
 
 With sequential six-hour Codex and Claude checks, an incoming update can take roughly twelve hours plus execution time to reach a Claude working session. Users can shorten one interval or explicitly choose event-driven monitoring if they prefer.
 
-See [event-driven setup](event-driven.md) before switching. Slack reception, Claude inbox wakeup and approved-answer publication need separate verified event paths. Keep the working schedule while an event replacement is incomplete; do not relabel polling as event-driven.
+`claude_wakeup_mode` records the owner's choice and does not change a job: `scheduled`, or `event_driven_with_daily_safety_check` for the [Claude Code watcher](claude.md#event-driven-wakeup-in-claude-code). See [event-driven setup](event-driven.md) before switching. Slack reception, Claude inbox wakeup and approved-answer publication need separate verified event paths. Keep the working schedule while an event replacement is incomplete; do not relabel polling as event-driven.

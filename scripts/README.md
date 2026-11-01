@@ -19,7 +19,7 @@ The long-running watcher is an opt-in event-driven mode, not the default. Both a
 
 Resolve a scheduled agent's configurable default with `python scripts/cadence.py --config /private/config.json --runtime codex` (or `claude`). This does not update an existing job; the agent must use the actual scheduler. See [cadence settings](../docs/cadence.md).
 
-Write local receipts to `receipts/` using exactly the corresponding inbox filename, after delivery or a confirmed no-match result. Receipts must be valid JSON objects recording source ID, outcome and per-destination results. Keep retryable failures in separate state and do not mark them complete. The helper ignores receipted items; it does not generate receipts.
+Write local receipts to `receipts/` using exactly the corresponding inbox filename, after delivery or a confirmed no-match result. Receipts must be valid JSON objects recording source ID, outcome and per-destination results. Keep retryable failures in separate state and do not mark them complete. The helper treats receipts with status `delivered`, `no_match` or `rejected` as finished; it does not generate receipts.
 
 Input text is never executed. Queue filenames are hashes of source identity, not sender-supplied paths. Existing queue entries are not changed on duplicate ingestion. Keep failed writes pending in the transport coordinator.
 

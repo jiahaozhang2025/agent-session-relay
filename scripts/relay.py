@@ -162,7 +162,7 @@ def pending(config):
             receipt = read_json(queue_directory(config, "receipts_directory", "receipts") / path.name)
         except (OSError, ValueError):
             receipt = None
-        if isinstance(receipt, dict) and receipt.get("source_id") == item["source_id"] and receipt.get("status") in ("delivered", "no_match"):
+        if isinstance(receipt, dict) and receipt.get("source_id") == item["source_id"] and receipt.get("status") in ("delivered", "no_match", "rejected"):
             continue
         yield path, item
 

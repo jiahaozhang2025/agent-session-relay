@@ -74,6 +74,13 @@ class RelayTests(unittest.TestCase):
         (root / "receipts" / Path(queued["path"]).name).write_text(json.dumps({"status": "delivered", "source_id": queued["source_id"]}), encoding="utf-8")
         self.assertEqual(list(relay.pending(self.config)), [])
 
+    def test_rejected_receipt_finishes_item(self):
+        queued = relay.enqueue(self.message, self.config)
+        receipt = Path(self.tmp.name) / "receipts" / Path(queued["path"]).name
+        receipt.parent.mkdir()
+        receipt.write_text(json.dumps({"status": "rejected", "source_id": queued["source_id"]}), encoding="utf-8")
+        self.assertEqual(list(relay.pending(self.config)), [])
+
     def test_partial_or_foreign_receipt_cannot_drop_retry(self):
         queued = relay.enqueue(self.message, self.config)
         receipt = Path(self.tmp.name) / "receipts" / Path(queued["path"]).name

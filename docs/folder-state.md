@@ -29,7 +29,8 @@ Use separate state for each configured channel. Identity is workspace_id:channel
 | `slack-inbox/SOURCE_HASH.json` | `relay.py export` output: original normalized Slack metadata/text/link, source_id, thread_ts, origin slack_export, intended_consumer codex-router, visited slack-exporter. Source hash is SHA256 of source_id. Immutable on duplicate ingestion. |
 | `slack-receipts/SOURCE_HASH.json` | Matching source_id and status processed, plus actual routing/queue outcomes or rejection reason. Never suppress pending failures without independent retry state. |
 | `claude-inbox/SOURCE_HASH.json` | `relay.py enqueue` output using configured inbox directory; source provenance, Codex deliveries and codex-router visited hop. A write means queued only. |
-| `claude-receipts/SOURCE_HASH.json` | Actual delivered/no_match/rejected result with source_id, native destinations and rationale. Retryable failures remain pending. |
+| `claude-receipts/SOURCE_HASH.json` | Actual delivered/no_match/rejected result with source_id, native destinations and rationale. The watcher treats all three as finished. A question or new-work item is delivered once its brief message succeeds. Retryable failures remain pending. |
+| `brief/items/SOURCE_HASH.json`, `brief/YYYY-MM-DD.md` | The analyst's classified item (fields in [the coordinator prompt](../prompts/claude-coordinator.md)) and the brief session's daily record. Slack text and session excerpts inside them stay untrusted. |
 | `answers/drafts/ID.json`, `answers/decided/ID.json` | Managed by answers.py; approved decisions include actual owner words/event reference, configured brief ID and approved-text hash. See the answer contract. |
 | `answer-outbox/HASH.json`, `answer-state/HASH.json`, `answer-sent/HASH.json` | Approved text, pre-send claim and confirmed receipt respectively. Managed by the existing publisher; native wakeup does not authorize a send. |
 

@@ -39,6 +39,19 @@ If both the Slack reader and Claude reader poll every six hours, delivery can ta
 
 Complete the cross-provider test before reporting Claude delivery active. The public repository is onboarding material, not the private inbox or a message transport.
 
+## Event-driven wakeup in Claude Code
+
+Use this only when the owner selects event-driven mode. These behaviors were tested on one Claude Code desktop installation, so test them again in yours. Idle wakeups from a background exit, a Monitor line, a Monitor expiry and a one-shot cron job were observed. A recurring job's run and its renewal were not.
+
+- Run `python scripts/relay.py watch --wait --config PRIVATE_CONFIG_JSON` as a background shell task. It uses no model while quiet, and its exit starts a turn in an idle session. Process the item, then restart exactly one watcher. If a delivery failed, wait for the safety check instead of restarting at once, because a new watcher re-emits a pending item on its first scan.
+- Monitor has a time limit (30 minutes when tested), and its expiry also wakes the session. It costs a model turn each time it runs out, even with no messages.
+- A hung watcher never exits, so nothing wakes the session. Add a scheduled safety check, every 24 hours unless the owner chooses otherwise. It runs `watch --once`, confirms the one watcher process is alive and restarts it if not.
+- CronCreate jobs belong to the session and end with its process. Recurring jobs expire after seven days, and the scheduler can shift a run by several minutes. Before expiry, a one-shot job should recreate the recurring job and its own successor. Verify with CronList.
+- The watcher is a child process of the session on the host that runs it. It is not a cluster job, so it does not appear in a batch queue.
+- The runtime's safety check can refuse a cross-session message even after earlier sends worked. Keep the item pending and report it to the owner. Do not resend from another session.
+
+Record this choice as `claude_wakeup_mode: event_driven_with_daily_safety_check`.
+
 ## Reviewed questions and the owner brief
 
 For the optional question workflow, use [the answer guide](answers.md) and start the separately authorized brief using [its role prompt](../prompts/owner-brief.md). The shared helpers in `scripts/` are reusable; private session IDs, configs and queue contents are installation state and are never published. Copy `answers.py`, `answer_publisher.py`, `relay.py` and `outbox.py` together to a private bridge if deploying them outside the clone. Each runtime must use its own accessible root path.
