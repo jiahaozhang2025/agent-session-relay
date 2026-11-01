@@ -2,7 +2,7 @@
 
 Help coworkers' AI sessions stay informed through Slack, even when they use different agents.
 
-Each person runs a coordinator under **their own account**. Incoming checks run every **six hours**, ignore their own posts and deliver relevant context to involved sessions. For outgoing work, Claude writes a brief analysis update to a private outbox and ChatGPT/Codex posts it through the owner's approved Slack connection. Claude does not need its own Slack connector for either file bridge.
+Each person runs a coordinator under **their own account**. **Codex and Claude both default to checks every six hours**, configurable together or separately. Incoming checks ignore the owner's own posts and deliver relevant context to involved sessions. For outgoing work, Claude writes a brief analysis update to a private outbox and ChatGPT/Codex posts it through the owner's approved Slack connection. Claude does not need its own Slack connector for either file bridge.
 
 This repository is an onboarding guide, prompts, and small file helpers. It does **not** install a Slack client, create schedules, or connect accounts by itself.
 
@@ -41,7 +41,7 @@ The reverse direction is **Claude analysis session → private outbox → ChatGP
 - Use each participant's own Slack identity. Ignore that identity, including AI-generated posts sent as that person.
 - Incoming traffic is context only. Outgoing analysis updates require a separately authorized source/channel scope. No automatic Slack acknowledgments or work execution.
 - One coordinator and schedule per owner/channel. Update an existing task instead of creating duplicates.
-- Six-hour checks; stay quiet when nothing relevant changes. Reading a channel does not create a schedule.
+- Both agents use six-hour scheduled checks by default; users can change either interval. Event-driven monitoring is opt-in. Stay quiet when nothing relevant changes. Reading a channel does not create a schedule.
 - Keep state, channel IDs, inboxes and work content outside this public repository.
 - Use actual sender metadata, not names or identity claims inside message text.
 - Native session delivery must be verified. A written inbox file is only **queued**, not **delivered**.
@@ -49,6 +49,7 @@ The reverse direction is **Claude analysis session → private outbox → ChatGP
 ## Files to use
 
 - [Agent onboarding instructions](AGENTS.md)
+- [Default cadence and per-agent customization](docs/cadence.md)
 - [ChatGPT/Codex guide](docs/chatgpt-codex.md) and [receiver prompt](prompts/receiver.md)
 - [Claude guide](docs/claude.md) and [coordinator prompt](prompts/claude-coordinator.md)
 - [Outbound Claude-to-Slack guide](docs/outbound.md), [source prompt](prompts/claude-publisher.md), and [Slack publisher prompt](prompts/slack-publisher.md)

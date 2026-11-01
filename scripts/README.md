@@ -13,7 +13,9 @@ python scripts/relay.py watch --config /private/config.json --once
 python scripts/relay.py watch --config /private/config.json
 ```
 
-The long-running watcher checks files every 30 seconds but emits a line only for a new pending source. Connect its stdout to a supported native agent Monitor integration to wake an agent; running this command in a plain shell does not do that by itself. Restarting the watcher re-emits items without receipts so an interrupted delivery can be retried.
+The long-running watcher is an opt-in event-driven mode, not the default. Both agents default to six-hour scheduled checks. In watcher mode it checks files every 30 seconds but emits a line only for a new pending source. Connect its stdout to a supported native agent Monitor integration to wake an agent; running this command in a plain shell does not do that by itself. Restarting the watcher re-emits items without receipts so an interrupted delivery can be retried.
+
+Resolve a scheduled agent's configurable default with `python scripts/cadence.py --config /private/config.json --runtime codex` (or `claude`). This does not update an existing job; the agent must use the actual scheduler. See [cadence settings](../docs/cadence.md).
 
 Write local receipts to `receipts/` using exactly the corresponding inbox filename, after delivery or a confirmed no-match result. Receipts must be valid JSON objects recording source ID, outcome and per-destination results. Keep retryable failures in separate state and do not mark them complete. The helper ignores receipted items; it does not generate receipts.
 

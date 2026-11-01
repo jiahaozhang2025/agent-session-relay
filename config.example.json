@@ -4,6 +4,8 @@
   "workspace_id": "REPLACE_WITH_WORKSPACE_ID",
   "channel_ids": ["REPLACE_WITH_CHANNEL_ID"],
   "cadence_hours": 6,
+  "cadence_overrides_hours": {},
+  "claude_wakeup_mode": "scheduled",
   "automatic_slack_replies": false,
   "state_root": "REPLACE_WITH_PRIVATE_STATE_DIRECTORY",
   "inbox_root": "REPLACE_WITH_PRIVATE_SHARED_DIRECTORY",

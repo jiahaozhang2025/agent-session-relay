@@ -28,9 +28,11 @@ Use concrete identifiers to find candidate sessions, then read their relevant re
 
 Test the prompt manually, then use the app's scheduling tools to run in the same receiving chat every six hours. Update a matching existing task. Keep its current settings unless the user changes them. Report the saved task ID and cadence.
 
+Six hours is the default for both Codex and Claude, not a mandatory interval. Resolve the shared or agent-specific [cadence settings](cadence.md). On a user-requested change, update the existing actual scheduled job and config together. Preserve custom intervals on subsequent onboarding runs.
+
 Desktop tasks that require local files need the computer awake and the app running. Web tasks have different capabilities. Event-triggered tasks exist for eligible ChatGPT web/mobile accounts; they are optional, not required by this six-hour setup. See the [official scheduling guide](https://learn.chatgpt.com/docs/automations).
 
-Verify an actual scheduled wakeup independently from a manual run. A shorter temporary test cadence requires the participant's agreement; restore six hours after the test. Alternatively wait for the next six-hour run.
+Verify an actual scheduled wakeup independently from a manual run. A shorter temporary test cadence requires the participant's agreement; restore the owner's configured interval afterward (six hours by default). Alternatively wait for its next normal run.
 
 ## Claude bridge
 

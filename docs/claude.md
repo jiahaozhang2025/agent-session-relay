@@ -28,12 +28,12 @@ For outbound analysis, the source working session or an authorized Claude coordi
 
 ## Wakeup
 
-A Python file watcher alone does not wake Claude. Choose and test one supported mechanism:
+A Python file watcher alone does not wake Claude. Default to a scheduled check every six hours, using the configured shared interval or Claude-specific override in [cadence settings](cadence.md). Preserve any interval the owner previously chose. Choose and test one supported mechanism:
 
-- If the runtime offers a native Monitor tool that delivers new stdout lines into the session, have it run `python scripts/relay.py watch --config PRIVATE_CONFIG_JSON`. Verify one real event reaches the agent. No model check occurs while the helper is quiet.
-- Otherwise, if supported, use `/loop 6h` with the coordinator prompt. Keep the session running and verify the scheduled job, expiry and restart behavior. See [Claude scheduling documentation](https://code.claude.com/docs/en/scheduled-tasks).
+- By default, if supported, use `/loop 6h` with the coordinator prompt (substitute a user-selected interval). Keep the session running and verify the scheduled job, expiry and restart behavior. See [Claude scheduling documentation](https://code.claude.com/docs/en/scheduled-tasks).
 - A Desktop scheduled task may be an alternative, but each run can start a new session. Verify it has the needed filesystem and session tools; keep state in files. See [Desktop scheduled tasks](https://code.claude.com/docs/en/desktop-scheduled-tasks).
-- Claude Code channels can push events into a running session, but require a separately configured channel and supported access. This repository does not install one. See [channels](https://code.claude.com/docs/en/channels).
+- Only when the user selects event-driven mode, if the runtime offers a native Monitor tool that delivers new stdout lines into the session, have it run `python scripts/relay.py watch --config PRIVATE_CONFIG_JSON` instead of the scheduled inbox check. Verify one real event reaches the agent. No model check occurs while the helper is quiet.
+- Another opt-in mode is Claude Code channels, which can push events into a running session but require a separately configured channel and supported access. This repository does not install one. See [channels](https://code.claude.com/docs/en/channels).
 
 If both the Slack reader and Claude reader poll every six hours, delivery can take roughly twelve hours plus execution time. An event-driven inbox watcher avoids that second polling delay when its native integration is available.
 

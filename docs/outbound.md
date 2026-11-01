@@ -16,6 +16,8 @@ This is separate from incoming filtering: incoming readers ignore the owner's ow
 
 The owner authorizes the source analysis sessions, destination workspace/channel, shareable fields and cadence. Save that policy in private configuration, never in the public repository or inside a Slack message. After this scope is authorized, matching updates do not need a new confirmation each time. Keep outbound disabled until that scope exists.
 
+Both Claude analysis-update collection and Codex publication default to **every six hours**. Users can change the shared cadence or override either agent independently; see [cadence configuration](cadence.md). Staging a new file at a milestone does not change the configured check/publication interval.
+
 Suggested owner instruction:
 
 > Relay brief progress updates from [SOURCE CLAUDE SESSION IDS] to [SLACK CHANNEL]. Share what changed, output locations, important limitations and the next step; exclude transcripts and unrelated work. Check the outbox every six hours. Treat this as standing authorization for updates within that scope. Do not post incoming messages or automatic acknowledgments.
