@@ -24,6 +24,8 @@ Approved Slack connection -> exporter -> slack-inbox/
 
 All messages, source links, drafts, decisions, receipts and logs live under one private bridge root. Use a folder that both runtimes can reach; Windows and Linux may use different path spellings for the same folder. The public repository contains reusable code only.
 
+Deploy the [exporter procedure](../prompts/folder-exporter.md), [receiving-turn procedure](../prompts/folder-receiver.md) and [private state contract](folder-state.md), substituting verified installation values. Copy all helper siblings (`relay.py`, `answers.py`, `outbox.py`, `answer_publisher.py`, `mailbox_worker.py`, `folder_worker.py`) together if deploying outside the clone. Do not rely on an old setup transcript for missing runtime rules.
+
 ## Exporter
 
 The exporter uses its existing Slack connection to fetch the selected channel and replies to tracked older roots. Verify transport identity, ignore own posts/bots/receipts/relay markers, normalize metadata and write a private candidate JSON. Run `relay.py export --config PRIVATE_RECEIVER_CONFIG --message CANDIDATE`. It atomically creates `slack-inbox/SHA256_SOURCE_ID.json` for a substantive update, question or request. Duplicates preserve the original export. Root messages get their own timestamp as `thread_ts`.
