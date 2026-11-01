@@ -52,11 +52,13 @@ For coworker questions, an optional separate flow is **incoming question → Son
 
 - [Agent onboarding instructions](AGENTS.md)
 - [Default cadence and per-agent customization](docs/cadence.md)
+- [Optional event-driven setup and platform boundaries](docs/event-driven.md)
 - [ChatGPT/Codex guide](docs/chatgpt-codex.md) and [receiver prompt](prompts/receiver.md)
 - [Claude guide](docs/claude.md) and [coordinator prompt](prompts/claude-coordinator.md)
 - [Outbound Claude-to-Slack guide](docs/outbound.md), [source prompt](prompts/claude-publisher.md), and [Slack publisher prompt](prompts/slack-publisher.md)
 - [Message and routing contract](docs/protocol.md)
 - [Reviewed answers and owner brief](docs/answers.md), [answer publisher prompt](prompts/answer-publisher.md)
+- [Claude owner-brief role](prompts/owner-brief.md), [ChatGPT web Slack-event setup](prompts/slack-event-receiver.md)
 - [Local Slack files and permissions](docs/slack-files.md)
 - [Validation and troubleshooting](docs/validation.md)
 - [Example local configuration](config.example.json)

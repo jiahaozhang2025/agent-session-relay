@@ -38,3 +38,9 @@ A Python file watcher alone does not wake Claude. Default to a scheduled check e
 If both the Slack reader and Claude reader poll every six hours, delivery can take roughly twelve hours plus execution time. An event-driven inbox watcher avoids that second polling delay when its native integration is available.
 
 Complete the cross-provider test before reporting Claude delivery active. The public repository is onboarding material, not the private inbox or a message transport.
+
+## Reviewed questions and the owner brief
+
+For the optional question workflow, use [the answer guide](answers.md) and start the separately authorized brief using [its role prompt](../prompts/owner-brief.md). The shared helpers in `scripts/` are reusable; private session IDs, configs and queue contents are installation state and are never published. Copy `answers.py`, `answer_publisher.py`, `relay.py` and `outbox.py` together to a private bridge if deploying them outside the clone. Each runtime must use its own accessible root path.
+
+The generic watcher supports `relay.py watch --wait` for a runtime that can wake its coordinator on background completion. Restart it after processing, avoid immediate retry loops after a failed delivery, and verify the actual idle-session wakeup. See [event-driven setup](event-driven.md) for the separate Slack-source and answer-publisher wakeups.

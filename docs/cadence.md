@@ -36,3 +36,5 @@ The helper only resolves a value. Editing JSON does **not** reschedule an alread
 Claude's default can use `/loop 6h` where supported; a custom interval must replace that example. Check the job lifetime and expiry in the actual runtime. Native Monitor/channels mode is opt-in; when enabled, it replaces the corresponding scheduled inbox check. The file watcher's 30-second filesystem scan is only for that optional mode and is not the default model-check cadence.
 
 With sequential six-hour Codex and Claude checks, an incoming update can take roughly twelve hours plus execution time to reach a Claude working session. Users can shorten one interval or explicitly choose event-driven monitoring if they prefer.
+
+See [event-driven setup](event-driven.md) before switching. Slack reception, Claude inbox wakeup and approved-answer publication need separate verified event paths. Keep the working schedule while an event replacement is incomplete; do not relabel polling as event-driven.
