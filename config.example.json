@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "owner_slack_user_id": "REPLACE_WITH_AUTHENTICATED_OWNER_ID",
+  "workspace_id": "REPLACE_WITH_WORKSPACE_ID",
+  "channel_ids": ["REPLACE_WITH_CHANNEL_ID"],
+  "cadence_hours": 6,
+  "automatic_slack_replies": false,
+  "state_root": "REPLACE_WITH_PRIVATE_STATE_DIRECTORY",
+  "inbox_root": "REPLACE_WITH_PRIVATE_SHARED_DIRECTORY",
+  "excluded_session_ids": [],
+  "codex_delivery_status": "unverified",
+  "claude_delivery_status": "unverified"
+}

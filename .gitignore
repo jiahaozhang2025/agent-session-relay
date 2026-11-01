@@ -1,0 +1,11 @@
+# Installation-specific data belongs outside this checkout.
+.local/
+config.local.json
+inbox/
+receipts/
+state/
+*.jsonl
+.env
+.env.*
+__pycache__/
+*.pyc
