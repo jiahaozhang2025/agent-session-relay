@@ -52,6 +52,10 @@ Use this only when the owner selects event-driven mode. These behaviors were tes
 
 Record this choice as `claude_wakeup_mode: event_driven_with_daily_safety_check`.
 
+## Optional session tree
+
+For a larger installation, the coordinator can be a master session with three linked subsessions: a receiver that holds the watcher and schedule, an analyzer that starts a fresh Opus analyst and Sonnet responder per item, and the owner brief. See [the session tree guide](claude-session-tree.md) and [its role prompts](../prompts/claude-session-tree.md). It changes who runs each step, not the policy.
+
 ## Reviewed questions and the owner brief
 
 For the optional question workflow, use [the answer guide](answers.md) and start the separately authorized brief using [its role prompt](../prompts/owner-brief.md). The shared helpers in `scripts/` are reusable; private session IDs, configs and queue contents are installation state and are never published. Copy `answers.py`, `answer_publisher.py`, `relay.py` and `outbox.py` together to a private bridge if deploying them outside the clone. Each runtime must use its own accessible root path.
