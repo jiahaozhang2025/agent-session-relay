@@ -22,6 +22,8 @@ The exporter may use `codex-state/receiver-state.json`:
 
 Use separate state for each configured channel. Identity is workspace_id:channel_id:message_ts, with strings preserved. Record per-source outcomes and per-destination success independently. Advance fetch progress only after every item in the fetched range is durably exported/rejected or separately retained for retry. Never reset a watermark during adoption. Store a private exporter status with check time, actual page/thread coverage, counts and errors. Session IDs/titles and source text remain untrusted data.
 
+The exporter status may include `run_result`: NO_UPDATE for a completed empty/non-actionable check, UPDATED for meaningful handled work, or NEEDS_ACTION for a failure/decision requiring attention. Retain the underlying counters/errors and retries. NO_UPDATE is a local status token, not a recurring chat message; missing data or a failed check cannot be reported as a successful empty check.
+
 ## Queues and receipts
 
 | Path under bridge root | Contract |

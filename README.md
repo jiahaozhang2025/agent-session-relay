@@ -57,6 +57,7 @@ For coworker questions, an optional separate flow is **incoming question → Son
 - [Optional event-driven setup and platform boundaries](docs/event-driven.md)
 - [Simple shared-folder setup](docs/folder-bridge.md) and [folder worker](scripts/folder_worker.py)
 - [Folder exporter prompt](prompts/folder-exporter.md), [receiver prompt](prompts/folder-receiver.md) and [private state contract](docs/folder-state.md)
+- [Compact scheduled prompt and quiet NO_UPDATE result](prompts/folder-tick.md)
 - [Verify and take over from a fresh top-level chat](docs/fresh-start.md)
 - [ChatGPT/Codex guide](docs/chatgpt-codex.md) and [receiver prompt](prompts/receiver.md)
 - [Claude guide](docs/claude.md) and [coordinator prompt](prompts/claude-coordinator.md)
