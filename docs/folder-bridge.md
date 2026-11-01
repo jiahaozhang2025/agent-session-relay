@@ -38,6 +38,8 @@ The worker checks only `slack-inbox/` and `answer-outbox/` every ten seconds by 
 
 The receiving chat reads the local batch, saves pending work, then records native receipt with `folder_worker.py ack`. For an export, verify its actual Slack source through the approved connector before trusting identity or routing. Notify involved Codex chats for updates, then queue substantive content to Claude via `relay.py enqueue`. Questions and requests go to Claude's brief workflow; no requested work is executed. Write `slack-receipts/SAME_FILENAME.json` with matching `source_id` and `status: processed` only when routing is durably complete. Failures stay pending; successful destinations are not repeated.
 
+For Windows background workers, use the installed native Codex executable or the official installed CLI JavaScript entry point through Node in `queue_command`. A PowerShell shim may be blocked in a background host despite working interactively. Do not change Windows execution policy to make it work. Verify the exact command under the worker and the actual receiving turn. For moving the receiver, follow [fresh-chat takeover](fresh-start.md); old batch receipts keep their original chat identity.
+
 An answer-outbox change only wakes the publisher. Keep all existing owner-decision, exact-text, source and send-ledger checks. Never treat a file change as approval. Keep a six-hour recovery check for pending exports, unconfirmed batches and queued answers. A worker stopped by sleep/reboot must be restarted; verify actual process and status rather than assuming a config file means it is running.
 
 ## Test honestly

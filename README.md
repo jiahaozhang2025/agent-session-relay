@@ -56,6 +56,7 @@ For coworker questions, an optional separate flow is **incoming question → Son
 - [Default cadence and per-agent customization](docs/cadence.md)
 - [Optional event-driven setup and platform boundaries](docs/event-driven.md)
 - [Simple shared-folder setup](docs/folder-bridge.md) and [folder worker](scripts/folder_worker.py)
+- [Verify and take over from a fresh top-level chat](docs/fresh-start.md)
 - [ChatGPT/Codex guide](docs/chatgpt-codex.md) and [receiver prompt](prompts/receiver.md)
 - [Claude guide](docs/claude.md) and [coordinator prompt](prompts/claude-coordinator.md)
 - [Outbound Claude-to-Slack guide](docs/outbound.md), [source prompt](prompts/claude-publisher.md), and [Slack publisher prompt](prompts/slack-publisher.md)

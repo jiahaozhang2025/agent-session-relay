@@ -104,6 +104,33 @@ class FolderWorkerTests(unittest.TestCase):
         self.assertEqual(batch["events"][0]["probe_id"], probe_id)
         self.assertFalse(self.tick()["queued"])
 
+    def test_new_chat_adopts_old_receipts_and_targets_new_work(self):
+        relay.export_message(self.message, self.export_config)
+        first = self.tick()
+        old_thread = self.config["thread_id"]
+        worker.acknowledge(self.config, first["batch_id"])
+        self.config["thread_id"] = "00000000-0000-0000-0000-000000000099"
+        self.assertFalse(self.tick()["queued"])
+        self.message["message_ts"] = "1700000000.000002"
+        relay.export_message(self.message, self.export_config)
+        second = self.tick()
+        batch = relay.read_json(self.root / "state" / "batches" / (second["batch_id"] + ".json"))
+        self.assertEqual(batch["thread_id"], self.config["thread_id"])
+        self.assertNotEqual(batch["thread_id"], old_thread)
+        self.assertEqual(self.sent[-1][3], self.config["thread_id"])
+
+    def test_handoff_does_not_accept_foreign_receipt(self):
+        relay.export_message(self.message, self.export_config)
+        first = self.tick()
+        worker.acknowledge(self.config, first["batch_id"])
+        path = self.root / "state" / "receipts" / (first["batch_id"] + ".json")
+        record = relay.read_json(path)
+        record["thread_id"] = "00000000-0000-0000-0000-000000000099"
+        write_json(path, record)
+        self.config["thread_id"] = record["thread_id"]
+        with self.assertRaises(ValueError):
+            self.tick()
+
 
 if __name__ == "__main__":
     unittest.main()

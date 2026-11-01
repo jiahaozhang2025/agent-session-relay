@@ -188,7 +188,13 @@ def tick(config, request=api, submit=run):
         receipt = root / "receipts" / (batch_id + ".json")
         if receipt.exists():
             record = read_json(receipt)
-            if record.get("batch_id") != batch_id or record.get("thread_id") != config["thread_id"] or record.get("status") != "received":
+            original = read_json(root / "batches" / (batch_id + ".json"))
+            if original.get("batch_id") != batch_id:
+                raise ValueError("invalid_original_batch")
+            uuid.UUID(original["thread_id"])
+            # A new coordinator may adopt the same durable state. Old receipts
+            # stay bound to their original batch/chat, not the new target.
+            if record.get("batch_id") != batch_id or record.get("thread_id") != original["thread_id"] or record.get("status") != "received":
                 raise ValueError("invalid_coordinator_receipt")
             batch["status"] = "received"
     errors = []
