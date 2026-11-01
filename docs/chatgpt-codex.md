@@ -41,3 +41,5 @@ Use a private directory accessible to the receiver and Claude, with `inbox/`, `r
 ## Outbound analysis updates
 
 To relay Claude's own analysis work to coworkers, configure the separate `outbox/` and `sent/` queues described in [outbound setup](outbound.md). After the owner establishes a source/channel scope, the same six-hour coordinator may check both directions. Claude writes the updates; ChatGPT/Codex sends them through its Slack connection. Incoming self-author rejection still applies to the resulting Slack posts, preventing a local echo.
+
+For individual owner-approved answers, configure the separate [question workflow](answers.md). Keep questions and requests in the incoming queue with their original thread root; review drafts in a separate brief, then publish exact approved text on the existing schedule. Do not enable analysis updates or automatic answering as a side effect.

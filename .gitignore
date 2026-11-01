@@ -6,6 +6,15 @@ receipts/
 outbox/
 sent/
 state/
+answer-outbox/
+answer-state/
+answer-sent/
+answers/
+brief/
+claude-inbox/
+claude-receipts/
+publisher-config.json
+receiver-config.json
 *.jsonl
 .env
 .env.*

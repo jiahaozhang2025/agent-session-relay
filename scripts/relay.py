@@ -9,6 +9,7 @@ import tempfile
 import time
 
 RECEIPTS = ("CODEX_BRIDGE_ACK", "CODEX_UPDATE_ACK", "SESSION_UPDATE_ACK", "CLAUDE_UPDATE_ACK")
+LOOP_MARKER = re.compile(r"Relay (update|answer):", re.IGNORECASE)
 
 
 def read_json(path):
@@ -45,17 +46,29 @@ def classify(message, config):
         return False, "empty"
     if message.get("message_kind") == "receipt" or body.lstrip().startswith(RECEIPTS):
         return False, "receipt"
-    if message.get("message_kind") != "update":
-        return False, "not_classified_as_update"
+    if LOOP_MARKER.search(body):
+        return False, "relay_post"
+    if message.get("message_kind") not in ("update", "question", "request", "new_work"):
+        return False, "not_substantive"
     ts = message.get("message_ts")
     if not isinstance(ts, str) or not re.fullmatch(r"\d+\.\d+", ts):
         return False, "invalid_timestamp"
+    thread = message.get("thread_ts", ts)
+    if not isinstance(thread, str) or not re.fullmatch(r"\d+\.\d+", thread):
+        return False, "invalid_thread_timestamp"
     hops = message.get("visited", [])
     if not isinstance(hops, list) or any(not isinstance(h, str) for h in hops):
         return False, "invalid_hops"
     if "codex-router" in hops or "claude-coordinator" in hops:
         return False, "bridge_echo"
     return True, "external_update"
+
+
+def queue_directory(config, key, default):
+    name = config.get(key, default)
+    if not isinstance(name, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", name):
+        raise ValueError("Queue directory must be a single safe directory name")
+    return Path(config["inbox_root"]).expanduser() / name
 
 
 def source_id(message):
@@ -68,7 +81,7 @@ def enqueue(message, config):
         return {"status": "skipped", "reason": reason}
     identity = source_id(message)
     root = Path(config["inbox_root"]).expanduser()
-    inbox = root / "inbox"
+    inbox = queue_directory(config, "inbox_directory", "inbox")
     inbox.mkdir(parents=True, exist_ok=True)
     name = hashlib.sha256(identity.encode("utf-8")).hexdigest() + ".json"
     target = inbox / name
@@ -77,6 +90,7 @@ def enqueue(message, config):
             raise ValueError("Existing queue item has unexpected provenance")
         return {"status": "already_queued", "source_id": identity, "path": str(target)}
     item = dict(message, schema_version=1, source_id=identity, origin="external_slack",
+                thread_ts=message.get("thread_ts", message["message_ts"]),
                 intended_consumer="claude-coordinator", visited=["codex-router"],
                 codex_deliveries=message.get("codex_deliveries", []))
     # One coordinator writes each owner/channel queue. Publish only complete JSON.
@@ -97,7 +111,7 @@ def enqueue(message, config):
 def pending(config):
     validate_config(config)
     root = Path(config["inbox_root"]).expanduser()
-    for path in sorted((root / "inbox").glob("*.json")):
+    for path in sorted(queue_directory(config, "inbox_directory", "inbox").glob("*.json")):
         try:
             item = read_json(path)
         except (OSError, ValueError):
@@ -114,7 +128,7 @@ def pending(config):
         if not isinstance(hops, list) or "claude-coordinator" in hops:
             continue
         try:
-            receipt = read_json(root / "receipts" / path.name)
+            receipt = read_json(queue_directory(config, "receipts_directory", "receipts") / path.name)
         except (OSError, ValueError):
             receipt = None
         if isinstance(receipt, dict) and receipt.get("source_id") == item["source_id"] and receipt.get("status") in ("delivered", "no_match"):
@@ -128,17 +142,20 @@ def main():
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--message", type=Path)
     parser.add_argument("--once", action="store_true", help="One filesystem check instead of watching")
+    parser.add_argument("--wait", action="store_true", help="Exit after emitting pending filenames, for a native background-completion wakeup")
     args = parser.parse_args()
     config = read_json(args.config)
     validate_config(config)
     if args.action == "watch":
         seen = set()
         while True:
+            emitted = False
             for path, item in pending(config):
                 if item["source_id"] not in seen:
                     print(json.dumps({"event": "incoming_update", "source_id": item["source_id"], "path": str(path)}), flush=True)
                     seen.add(item["source_id"])
-            if args.once:
+                    emitted = True
+            if args.once or (args.wait and emitted):
                 return
             time.sleep(30)
     else:

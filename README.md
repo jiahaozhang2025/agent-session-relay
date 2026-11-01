@@ -36,6 +36,8 @@ The coordinator checks Codex relevance before queuing the same accepted update f
 
 The reverse direction is **Claude analysis session → private outbox → ChatGPT/Codex publisher → Slack → coworker's receiver**. See [outbound setup](docs/outbound.md). One existing six-hour coordinator can handle both queues when its owner authorizes publication.
 
+For coworker questions, an optional separate flow is **incoming question → Sonnet triage → fresh Opus reads existing work → fresh Sonnet drafts → owner brief and approval → answer outbox → exact Slack thread reply**. New-work requests go to the brief without executing them. See [reviewed answers](docs/answers.md). Answers and analysis updates have separate policies and queues.
+
 ## Defaults
 
 - Use each participant's own Slack identity. Ignore that identity, including AI-generated posts sent as that person.
@@ -54,6 +56,7 @@ The reverse direction is **Claude analysis session → private outbox → ChatGP
 - [Claude guide](docs/claude.md) and [coordinator prompt](prompts/claude-coordinator.md)
 - [Outbound Claude-to-Slack guide](docs/outbound.md), [source prompt](prompts/claude-publisher.md), and [Slack publisher prompt](prompts/slack-publisher.md)
 - [Message and routing contract](docs/protocol.md)
+- [Reviewed answers and owner brief](docs/answers.md), [answer publisher prompt](prompts/answer-publisher.md)
 - [Local Slack files and permissions](docs/slack-files.md)
 - [Validation and troubleshooting](docs/validation.md)
 - [Example local configuration](config.example.json)

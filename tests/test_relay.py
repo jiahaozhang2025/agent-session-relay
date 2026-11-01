@@ -87,6 +87,27 @@ class RelayTests(unittest.TestCase):
         self.message["message_ts"] = "../../outside"
         self.assertEqual(relay.enqueue(self.message, self.config)["reason"], "invalid_timestamp")
 
+    def test_questions_requests_and_thread_provenance(self):
+        for kind in ("question", "request", "new_work"):
+            with self.subTest(kind=kind):
+                self.assertTrue(relay.classify(dict(self.message, message_kind=kind), self.config)[0])
+        queued = relay.enqueue(dict(self.message, message_kind="question"), self.config)
+        self.assertEqual(relay.read_json(queued["path"])["thread_ts"], self.message["message_ts"])
+        self.assertEqual(relay.classify(dict(self.message, thread_ts=1700000000.1), self.config)[1], "invalid_thread_timestamp")
+
+    def test_relay_footers_rejected_anywhere_case_insensitive(self):
+        for text in ("Question\nRelay answer: A1", "quote: RELAY UPDATE: ID\nQuestion?"):
+            self.assertEqual(relay.classify(dict(self.message, text=text), self.config)[1], "relay_post")
+
+    def test_existing_bridge_directory_names(self):
+        self.config.update(inbox_directory="claude-inbox", receipts_directory="claude-receipts")
+        queued = relay.enqueue(self.message, self.config)
+        self.assertEqual(Path(queued["path"]).parent.name, "claude-inbox")
+        self.assertEqual(len(list(relay.pending(self.config))), 1)
+        self.config["inbox_directory"] = "../outside"
+        with self.assertRaises(ValueError):
+            relay.enqueue(self.message, self.config)
+
 
 if __name__ == "__main__":
     unittest.main()

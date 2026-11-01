@@ -9,9 +9,19 @@
   "automatic_slack_replies": false,
   "state_root": "REPLACE_WITH_PRIVATE_STATE_DIRECTORY",
   "inbox_root": "REPLACE_WITH_PRIVATE_SHARED_DIRECTORY",
+  "inbox_directory": "inbox",
+  "receipts_directory": "receipts",
   "excluded_session_ids": [],
   "codex_delivery_status": "unverified",
   "claude_delivery_status": "unverified",
+  "answers": {
+    "enabled": false,
+    "mode": "approval",
+    "channel_ids": [],
+    "approval_session_id": "REPLACE_WITH_OWNER_BRIEF_SESSION_ID",
+    "max_per_thread": 3,
+    "max_per_day": 10
+  },
   "outbound": {
     "enabled": false,
     "source_session_ids": [],
