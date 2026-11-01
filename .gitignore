@@ -17,7 +17,7 @@ publisher-config.json
 receiver-config.json
 mailbox-config.json
 worker-state/
-folder-worker.config.json
+/folder-worker.config.json
 slack-inbox/
 slack-receipts/
 *.jsonl

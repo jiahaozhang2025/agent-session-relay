@@ -1,0 +1,15 @@
+{
+  "enabled": false,
+  "mailbox_enabled": false,
+  "owner_slack_user_id": "REPLACE_WITH_VERIFIED_OWNER_SLACK_ID",
+  "workspace_id": "REPLACE_WITH_SLACK_WORKSPACE_ID",
+  "channel_ids": ["CEXAMPLE"],
+  "thread_id": "00000000-0000-0000-0000-000000000000",
+  "state_root": "REPLACE_WITH_PRIVATE_WORKER_STATE",
+  "runtime_file": "REPLACE_WITH_PRIVATE_RUNBOOK",
+  "file_inbox": "REPLACE_WITH_PRIVATE_BRIDGE/slack-inbox",
+  "file_receipts": "REPLACE_WITH_PRIVATE_BRIDGE/slack-receipts",
+  "answer_root": "REPLACE_WITH_PRIVATE_BRIDGE",
+  "poll_seconds": 10,
+  "queue_command": ["codex"]
+}
