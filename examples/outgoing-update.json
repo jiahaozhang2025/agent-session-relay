@@ -1,0 +1,12 @@
+{
+  "update_id": "atlas-analysis-run2-complete",
+  "source_session_id": "REPLACE_WITH_ACTUAL_SOURCE_SESSION_ID",
+  "workspace_id": "REPLACE_WITH_APPROVED_WORKSPACE_ID",
+  "channel_id": "REPLACE_WITH_APPROVED_CHANNEL_ID",
+  "origin": "local_analysis",
+  "kind": "analysis_update",
+  "summary": "Project atlas: the recomputation is complete.",
+  "output_locations": ["/project/atlas/run-2/README.md", "/project/atlas/run-2/results/"],
+  "limitations": ["Pilot subset only; full run pending."],
+  "next_step": "Review the output summary before the full run."
+}

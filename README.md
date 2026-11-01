@@ -2,7 +2,7 @@
 
 Help coworkers' AI sessions stay informed through Slack, even when they use different agents.
 
-Each person runs an incoming coordinator under **their own account**. It checks a shared channel every **six hours**, ignores their own posts, finds involved working sessions, and delivers relevant context once. Claude can receive through a local/shared inbox when its Slack connector is unavailable.
+Each person runs a coordinator under **their own account**. Incoming checks run every **six hours**, ignore their own posts and deliver relevant context to involved sessions. For outgoing work, Claude writes a brief analysis update to a private outbox and ChatGPT/Codex posts it through the owner's approved Slack connection. Claude does not need its own Slack connector for either file bridge.
 
 This repository is an onboarding guide, prompts, and small file helpers. It does **not** install a Slack client, create schedules, or connect accounts by itself.
 
@@ -10,7 +10,7 @@ This repository is an onboarding guide, prompts, and small file helpers. It does
 
 Give your agent this repository URL and say:
 
-> Read the README and AGENTS.md in this repository. Help me set up incoming project updates from my coworkers. Detect which agent and tools you actually have, follow the matching guide, and default to checks every six hours. If you cannot read Slack here, give me the handoff prompt for ChatGPT/Codex and prepare the receiving side here. Verify the setup before saying it works.
+> Read the README and AGENTS.md in this repository. Help me set up incoming coworker updates and outgoing updates from my analysis sessions. Detect which agent and tools you actually have, follow the matching guides, and default to checks every six hours. If you lack Slack access, give me the ChatGPT/Codex handoff prompt and prepare the private inbox/outbox here. Establish my source sessions and destination channel before enabling publication. Verify each direction before saying it works.
 
 | Where you work | What to do |
 | --- | --- |
@@ -34,10 +34,12 @@ flowchart LR
 
 The coordinator checks Codex relevance before queuing the same accepted update for Claude to assess independently. Matching uses dataset IDs, paths and named work, followed by reading relevant context. It does not broadcast updates to every session.
 
+The reverse direction is **Claude analysis session → private outbox → ChatGPT/Codex publisher → Slack → coworker's receiver**. See [outbound setup](docs/outbound.md). One existing six-hour coordinator can handle both queues when its owner authorizes publication.
+
 ## Defaults
 
 - Use each participant's own Slack identity. Ignore that identity, including AI-generated posts sent as that person.
-- Incoming context only. No automatic Slack acknowledgments, replies, project changes or work execution.
+- Incoming traffic is context only. Outgoing analysis updates require a separately authorized source/channel scope. No automatic Slack acknowledgments or work execution.
 - One coordinator and schedule per owner/channel. Update an existing task instead of creating duplicates.
 - Six-hour checks; stay quiet when nothing relevant changes. Reading a channel does not create a schedule.
 - Keep state, channel IDs, inboxes and work content outside this public repository.
@@ -49,16 +51,17 @@ The coordinator checks Codex relevance before queuing the same accepted update f
 - [Agent onboarding instructions](AGENTS.md)
 - [ChatGPT/Codex guide](docs/chatgpt-codex.md) and [receiver prompt](prompts/receiver.md)
 - [Claude guide](docs/claude.md) and [coordinator prompt](prompts/claude-coordinator.md)
+- [Outbound Claude-to-Slack guide](docs/outbound.md), [source prompt](prompts/claude-publisher.md), and [Slack publisher prompt](prompts/slack-publisher.md)
 - [Message and routing contract](docs/protocol.md)
 - [Local Slack files and permissions](docs/slack-files.md)
 - [Validation and troubleshooting](docs/validation.md)
 - [Example local configuration](config.example.json)
 - [Optional Python file helper](scripts/relay.py), Python 3.10+, standard library only
 
-Automatic publication from working sessions is separate from receiving. To publish, explicitly authorize the source sessions, destination channel and fields to share. Keep updates brief: what changed, output locations, limitations and next step. Do not publish whole transcripts by default.
+Automatic publication from working sessions is separate from receiving and has its own outbox and sent ledger. Authorize the source sessions, destination channel and fields once, then publish matching updates without a fresh confirmation each time. Keep updates brief: what changed, output locations, limitations and next step. Do not publish whole transcripts by default.
 
 ## Verification status
 
-An initial installation tested Codex-to-Codex Slack exchange, scheduler-driven wakeup, rejection of self-authored messages, and file-helper behavior. The cross-provider Claude delivery route is a prepared design and must be tested in each environment. Reading this repository does not prove your installation is connected.
+An initial installation tested Codex-to-Codex Slack exchange, scheduler-driven wakeup, rejection of self-authored messages, and file-helper behavior. Cross-provider incoming/outgoing delivery must be tested in each environment; the outbox helper does not itself send Slack messages. Reading this repository does not prove your installation is connected.
 
 See [current official sources](docs/sources.md) for product requirements; tools and availability vary by account and workspace.

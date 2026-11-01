@@ -9,5 +9,12 @@
   "inbox_root": "REPLACE_WITH_PRIVATE_SHARED_DIRECTORY",
   "excluded_session_ids": [],
   "codex_delivery_status": "unverified",
-  "claude_delivery_status": "unverified"
+  "claude_delivery_status": "unverified",
+  "outbound": {
+    "enabled": false,
+    "source_session_ids": [],
+    "channel_ids": [],
+    "shareable_fields": ["summary", "output_locations", "limitations", "next_step"],
+    "publication_status": "unverified"
+  }
 }

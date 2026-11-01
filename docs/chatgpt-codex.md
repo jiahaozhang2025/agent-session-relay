@@ -35,3 +35,7 @@ Verify an actual scheduled wakeup independently from a manual run. A shorter tem
 ## Claude bridge
 
 Use a private directory accessible to the receiver and Claude, with `inbox/`, `receipts/`, and `state/` subdirectories. Pass its path privately. A filesystem can carry an update but cannot itself start an agent turn. Follow the [Claude guide](claude.md) to verify the wakeup mechanism and native session tools.
+
+## Outbound analysis updates
+
+To relay Claude's own analysis work to coworkers, configure the separate `outbox/` and `sent/` queues described in [outbound setup](outbound.md). After the owner establishes a source/channel scope, the same six-hour coordinator may check both directions. Claude writes the updates; ChatGPT/Codex sends them through its Slack connection. Incoming self-author rejection still applies to the resulting Slack posts, preventing a local echo.

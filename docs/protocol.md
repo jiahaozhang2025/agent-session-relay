@@ -49,3 +49,5 @@ To inform a working session, include the source author and permalink, relevant r
 ## Publication is separate
 
 Receiving does not authorize outbound updates. A publisher needs human authorization for the source sessions, destination channel and shareable content. Use concise summaries and paths. Do not upload full transcripts, secrets or results to this public repository.
+
+Once authorized, use the local-analysis outbox described in [outbound setup](outbound.md). The publisher's source-session policy is distinct from the incoming Slack-author filter. The owner may publish local analysis while still ignoring their own Slack posts on ingress. Persist sent evidence and resolve ambiguous transport outcomes before retrying.

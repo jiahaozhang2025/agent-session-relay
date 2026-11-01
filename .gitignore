@@ -3,6 +3,8 @@
 config.local.json
 inbox/
 receipts/
+outbox/
+sent/
 state/
 *.jsonl
 .env

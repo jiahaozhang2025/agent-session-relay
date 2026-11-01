@@ -18,3 +18,14 @@ The long-running watcher checks files every 30 seconds but emits a line only for
 Write local receipts to `receipts/` using exactly the corresponding inbox filename, after delivery or a confirmed no-match result. Receipts must be valid JSON objects recording source ID, outcome and per-destination results. Keep retryable failures in separate state and do not mark them complete. The helper ignores receipted items; it does not generate receipts.
 
 Input text is never executed. Queue filenames are hashes of source identity, not sender-supplied paths. Existing queue entries are not changed on duplicate ingestion. Keep failed writes pending in the transport coordinator.
+
+## Outgoing analysis updates
+
+Use `outbox.py` for the reverse file queue. Copy the owner's source/channel authorization into the private config's `outbound` section; publication defaults to disabled. A draft may be queued before publication is enabled.
+
+```sh
+python scripts/outbox.py queue --root /private/bridge --update /private/analysis-update.json
+python scripts/outbox.py prepare --root /private/bridge --config /private/config.json --update /private/analysis-update.json
+```
+
+`prepare` checks the source/channel policy and a confirmed sent receipt, then returns `prepared_not_sent`. It does not call Slack or inspect an in-flight ledger. The publishing agent must perform the ledger/ambiguity checks, actual send and confirmed receipt handling in [the outbound guide](../docs/outbound.md). The helper cannot guarantee exactly-once transport delivery. Use one writer per update ID.
