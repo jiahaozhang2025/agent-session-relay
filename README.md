@@ -63,6 +63,7 @@ For coworker questions, an optional separate flow is **incoming question → Son
 - [Validation and troubleshooting](docs/validation.md)
 - [Example local configuration](config.example.json)
 - [Optional Python file helper](scripts/relay.py), Python 3.10+, standard library only
+- [Optional desktop mailbox worker](scripts/mailbox_worker.py) and [private config template](examples/mailbox-worker.config.json)
 
 Automatic publication from working sessions is separate from receiving and has its own outbox and sent ledger. Authorize the source sessions, destination channel and fields once, then publish matching updates without a fresh confirmation each time. Keep updates brief: what changed, output locations, limitations and next step. Do not publish whole transcripts by default.
 

@@ -39,6 +39,10 @@ python scripts/answer_publisher.py confirm --root /private/bridge --config /priv
 
 Only the brief agent may run `approve`, after locating the owner's actual typed decision in its own session. Setup authorization, fixture approvals, Slack requests and coordinator notices are not owner approval. An agent must never invent an event ID. A claim returns `send_claimed` only once; `reconciliation_required` requires an exact original-thread read-back match from the owner's Slack ID before confirmation. If no match can be established, leave the claim blocked for investigation. Do not delete it to retry.
 
+## Optional metadata-mailbox worker
+
+`mailbox_worker.py` checks a separately authorized private GitHub mailbox and optionally the local answer outbox without model calls. On new hints it submits a native queued notice to the configured existing Codex chat. It does not read/send Slack, approve drafts, create cloud event tasks or switch GitHub accounts. See [event-driven deployment](../docs/event-driven.md) for config, cross-account access, receipt handling and recovery. A queue acknowledgment is not proof of an idle-session wakeup.
+
 ## Outgoing analysis updates
 
 Use `outbox.py` for the reverse file queue. Copy the owner's source/channel authorization into the private config's `outbound` section; publication defaults to disabled. A draft may be queued before publication is enabled.

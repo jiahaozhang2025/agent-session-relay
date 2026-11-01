@@ -1,0 +1,14 @@
+{
+  "enabled": false,
+  "repository": "YOUR_OWNER/YOUR_PRIVATE_MAILBOX",
+  "expected_cli_login": "YOUR_DESKTOP_GITHUB_LOGIN",
+  "workspace_id": "YOUR_SLACK_WORKSPACE_ID",
+  "channel_ids": ["CEXAMPLE"],
+  "thread_id": "00000000-0000-0000-0000-000000000000",
+  "state_root": "REPLACE_WITH_PRIVATE_WORKER_STATE",
+  "runtime_file": "REPLACE_WITH_PRIVATE_WORKER_RUNBOOK",
+  "answer_root": "REPLACE_WITH_PRIVATE_BRIDGE_ROOT",
+  "poll_seconds": 60,
+  "gh_command": ["gh"],
+  "queue_command": ["codex"]
+}
