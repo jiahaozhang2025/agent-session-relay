@@ -6,6 +6,8 @@ Each person runs a coordinator under **their own account**. **Codex and Claude b
 
 This repository is an onboarding guide, prompts, and small file helpers. It does **not** install a Slack client, create schedules, or connect accounts by itself.
 
+If your desktop agent already has Slack and file access, start with the [simple shared-folder relay](docs/folder-bridge.md). The exporter writes files, a quiet worker wakes the desktop receiver, and Claude uses the shared inbox/outbox. Slack fetching still uses the chosen schedule (six hours by default); local file changes can trigger processing promptly.
+
 ## Start here
 
 Give your agent this repository URL and say:
@@ -53,6 +55,7 @@ For coworker questions, an optional separate flow is **incoming question → Son
 - [Agent onboarding instructions](AGENTS.md)
 - [Default cadence and per-agent customization](docs/cadence.md)
 - [Optional event-driven setup and platform boundaries](docs/event-driven.md)
+- [Simple shared-folder setup](docs/folder-bridge.md) and [folder worker](scripts/folder_worker.py)
 - [ChatGPT/Codex guide](docs/chatgpt-codex.md) and [receiver prompt](prompts/receiver.md)
 - [Claude guide](docs/claude.md) and [coordinator prompt](prompts/claude-coordinator.md)
 - [Outbound Claude-to-Slack guide](docs/outbound.md), [source prompt](prompts/claude-publisher.md), and [Slack publisher prompt](prompts/slack-publisher.md)

@@ -108,6 +108,37 @@ def enqueue(message, config):
     return {"status": "queued", "source_id": identity, "path": str(target)}
 
 
+def export_message(message, config):
+    """Publish an immutable local export for Codex, not the Claude consumer."""
+    accepted, reason = classify(message, config)
+    if not accepted:
+        return {"status": "skipped", "reason": reason}
+    identity = source_id(message)
+    root = Path(config["inbox_root"]).expanduser()
+    inbox = root / "slack-inbox"
+    inbox.mkdir(parents=True, exist_ok=True)
+    target = inbox / (hashlib.sha256(identity.encode()).hexdigest() + ".json")
+    item = dict(message, schema_version=1, source_id=identity, origin="slack_export",
+                thread_ts=message.get("thread_ts", message["message_ts"]),
+                intended_consumer="codex-router", visited=["slack-exporter"])
+    if target.exists():
+        if read_json(target).get("source_id") != identity:
+            raise ValueError("Existing export has unexpected provenance")
+        return {"status": "already_exported", "source_id": identity, "path": str(target)}
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=inbox, suffix=".tmp", delete=False) as stream:
+            temporary = Path(stream.name)
+            json.dump(item, stream, indent=2, ensure_ascii=False)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, target)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
+    return {"status": "exported", "source_id": identity, "path": str(target)}
+
+
 def pending(config):
     validate_config(config)
     root = Path(config["inbox_root"]).expanduser()
@@ -138,7 +169,7 @@ def pending(config):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("filter", "enqueue", "watch"))
+    parser.add_argument("action", choices=("filter", "enqueue", "export", "watch"))
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--message", type=Path)
     parser.add_argument("--once", action="store_true", help="One filesystem check instead of watching")
@@ -160,11 +191,13 @@ def main():
             time.sleep(30)
     else:
         if args.message is None:
-            parser.error("--message is required for filter/enqueue")
+            parser.error("--message is required for filter/enqueue/export")
         message = read_json(args.message)
         if args.action == "filter":
             accepted, reason = classify(message, config)
             result = {"accepted": accepted, "reason": reason}
+        elif args.action == "export":
+            result = export_message(message, config)
         else:
             result = enqueue(message, config)
         print(json.dumps(result))
