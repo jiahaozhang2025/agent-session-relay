@@ -61,6 +61,7 @@ For coworker questions, an optional separate flow is **incoming question → Son
 - [Verify and take over from a fresh top-level chat](docs/fresh-start.md)
 - [ChatGPT/Codex guide](docs/chatgpt-codex.md) and [receiver prompt](prompts/receiver.md)
 - [Claude guide](docs/claude.md) and [coordinator prompt](prompts/claude-coordinator.md)
+- [Optional Claude session tree](docs/claude-session-tree.md) (master, receiver, analyzer, briefing) and [role prompts](prompts/claude-session-tree.md)
 - [Outbound Claude-to-Slack guide](docs/outbound.md), [source prompt](prompts/claude-publisher.md), and [Slack publisher prompt](prompts/slack-publisher.md)
 - [Message and routing contract](docs/protocol.md)
 - [Reviewed answers and owner brief](docs/answers.md), [answer publisher prompt](prompts/answer-publisher.md)
