@@ -2,6 +2,10 @@
 
 Python 3.10+; no packages, credentials, Slack SDK, server or network calls.
 
+`receiver_rotation.py` supplies opt-in daily receiver age checks and durable
+handoff reservations. Native app tools still create/verify/archive chats and
+retarget the existing automation; see [receiver rotation](../docs/receiver-rotation.md).
+
 An authorized transport adapter obtains real metadata, checks session relevance, and writes a normalized message JSON privately. This helper filters identity/scope and queues a copy for Claude. It does not implement the transport adapter, scheduling, cursors, session matching, delivery or a delivery ledger. Those responsibilities stay with the coordinator described in the guides.
 
 Copy config.example.json to a private location and fill it. Set `inbox_root` to the private directory accessible to both coordinators. Only one coordinator may write a given owner/channel queue at a time.

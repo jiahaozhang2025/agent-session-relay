@@ -19,6 +19,7 @@ import uuid
 from answers import write_json
 from relay import read_json
 import relay
+import receiver_rotation
 
 
 def now():
@@ -178,6 +179,12 @@ def scan_answers(config):
         yield "answer-" + path.stem, {"kind": "answer_outbox_hint", "filename": path.name}
 
 
+def scan_rotation(config):
+    event = receiver_rotation.due_event(config)
+    if event:
+        yield event
+
+
 def tick(config, request=api, submit=run):
     config_check(config)
     root = Path(config["state_root"])
@@ -198,7 +205,8 @@ def tick(config, request=api, submit=run):
                 raise ValueError("invalid_coordinator_receipt")
             batch["status"] = "received"
     errors = []
-    scanners = [lambda: scan_files(config, errors), lambda: scan_answers(config), lambda: scan_probes(config, errors)]
+    scanners = [lambda: scan_files(config, errors), lambda: scan_answers(config), lambda: scan_probes(config, errors),
+                lambda: scan_rotation(config)]
     if config.get("mailbox_enabled", True):
         scanners.insert(0, lambda: scan_mailbox(config, request, state.setdefault("mailbox_seen", {})))
     for scanner in scanners:

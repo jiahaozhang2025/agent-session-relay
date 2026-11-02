@@ -59,6 +59,7 @@ For coworker questions, an optional separate flow is **incoming question → Son
 - [Folder exporter prompt](prompts/folder-exporter.md), [receiver prompt](prompts/folder-receiver.md) and [private state contract](docs/folder-state.md)
 - [Compact scheduled prompt and quiet NO_UPDATE result](prompts/folder-tick.md)
 - [Verify and take over from a fresh top-level chat](docs/fresh-start.md)
+- [Optional receiver retirement every 24 hours](docs/receiver-rotation.md)
 - [ChatGPT/Codex guide](docs/chatgpt-codex.md) and [receiver prompt](prompts/receiver.md)
 - [Claude guide](docs/claude.md) and [coordinator prompt](prompts/claude-coordinator.md)
 - [Optional Claude session tree](docs/claude-session-tree.md) (master, receiver, analyzer, briefing) and [role prompts](prompts/claude-session-tree.md)

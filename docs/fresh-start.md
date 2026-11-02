@@ -2,6 +2,8 @@
 
 Use a new user-owned chat, not a subagent or a fork of the setup conversation. Give it the GitHub URL, the private installation root, the selected interval and authorization scope. Do not pass the old transcript or treat a past report as a successful test.
 
+For owner-authorized recurring retirement, use the [24-hour rotation transaction](receiver-rotation.md) with this takeover procedure. Keep the same durable installation and schedule.
+
 ## Independent bootstrap
 
 1. Fetch or clone the current remote default branch into the fresh chat's own directory. Read README.md, AGENTS.md, folder-bridge.md, protocol.md, answers.md and the applicable runtime guide from that checkout. Record the fetched commit. Run the helper tests there.
